@@ -1,0 +1,22 @@
+version: '2.4'
+
+services:
+  webapp:
+    container_name: webapp
+    build:
+      context: ./webapp
+    image: webapp
+    ports:
+      - 80:80
+    command: sh -c "uvicorn main:app --log-config log.ini --host 0.0.0.0 --port 80"
+
+  functional_tests:
+    container_name: functional_tests
+    build:
+      context: ./functional_tests
+    links:
+      - "webapp:webapp"
+    image: functional_tests
+    environment:
+      TEST_APP_URL: http://webapp.localhost:80/people/20/
+    command: bash -c "robot tests.robot"
