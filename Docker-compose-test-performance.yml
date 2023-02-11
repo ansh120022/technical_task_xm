@@ -10,13 +10,13 @@ services:
       - 80:80
     command: sh -c "uvicorn main:app --log-config log.ini --host 0.0.0.0 --port 80"
 
-  functional_tests:
+  performance_tests:
     depends_on:
       - webapp
-    container_name: functional_tests
+    container_name: performance_tests
     build:
-      context: ./functional_tests
-    image: functional_tests
+      context: ./performance_tests
+    image: performance_tests
     environment:
       TEST_APP_URL: http://webapp:80
-    command: bash -c "robot tests.robot"
+    command: python tests.py

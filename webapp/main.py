@@ -1,4 +1,6 @@
 from fastapi import FastAPI, HTTPException, status
+from time import sleep
+from random import randint
 
 app = FastAPI()
 
@@ -24,16 +26,19 @@ def validate_id(element_id) -> None:
 @app.get("/people/{person_id}/", status_code=status.HTTP_200_OK)
 def get_person(person_id):
     validate_id(person_id)
+    sleep(randint(0, 2))
     return server_response()
 
 
 @app.get("/planets/{planet_id}/", status_code=200)
 def get_planet(planet_id):
     validate_id(planet_id)
+    sleep(randint(2, 4))
     return server_response()
 
 
 @app.get("/starships/{starship_id}/", status_code=200)
 def get_starship(starship_id):
     validate_id(starship_id)
+    sleep(randint(4, 6))
     return server_response()

@@ -1,17 +1,18 @@
 from time import time
 import requests
+import statistics
 
 
 class PerformanceTest():
     def __init__(self, url, load_time):
         self.url = url
-        self.load_time = load_time
+        self.load_time = load_time * 60
         self.endpoint_responses_time = []
 
-    def load_endpoint(self):
+    def load_endpoint(self) -> None:
         """ Runs nested function repeatedly for specified period of time in minutes"""
         running_time = 0
-        while running_time < self.load_time / 60:
+        while running_time < self.load_time:
             start = time()
             requests.get(self.url)
             response_time = time() - start
@@ -19,8 +20,7 @@ class PerformanceTest():
             self.endpoint_responses_time.append(response_time)
 
     def count_standard_deviation(self) -> float:
-        return round(sum((x - (sum(self.endpoint_responses_time) / len(self.endpoint_responses_time))) ** 2 for x in self.endpoint_responses_time) / (
-                    len(self.endpoint_responses_time) - 1) ** 0.5, 2)
+        return round(statistics.stdev(self.endpoint_responses_time), 2)
 
     def count_mean_value(self) -> float:
         return round(sum(self.endpoint_responses_time) / len(self.endpoint_responses_time), 2)
